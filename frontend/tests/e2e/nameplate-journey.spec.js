@@ -138,8 +138,8 @@ test('nameplate stays the main journey through comments, login resume, and debat
 
   await page.locator('.support-action').click();
   await expect(page).toHaveURL(/\/pages\/login\/login/);
-  const phone = page.locator('.phone-input input.uni-input-input');
-  const code = page.locator('.code-input input.uni-input-input');
+  const phone = page.locator('.phone-input input');
+  const code = page.locator('.code-input input');
   await phone.fill('13800001234');
   await page.locator('.code-button').click();
   await code.fill('123456');

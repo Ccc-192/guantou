@@ -178,6 +178,30 @@ describe('immersive home (Issue #192)', () => {
     expect(wrapper.find('.home-top-bar-stub').attributes('data-active')).toBe('dialect');
   });
 
+  it('uses the tab from the URL when provided', async () => {
+    setupUni('token-value');
+    resolveDefaultTab.mockReturnValue('dialect');
+
+    const wrapper = mountHome();
+    wrapper.vm.$options.onLoad.call(wrapper.vm, { tab: 'today' });
+    await wrapper.vm.$nextTick();
+
+    expect(wrapper.find('.home-feed-stub').attributes('data-tab')).toBe('today');
+    expect(wrapper.find('.home-top-bar-stub').attributes('data-active')).toBe('today');
+  });
+
+  it('falls back to the default tab when the URL tab is invalid', async () => {
+    setupUni('token-value');
+    resolveDefaultTab.mockReturnValue('dialect');
+
+    const wrapper = mountHome();
+    wrapper.vm.$options.onLoad.call(wrapper.vm, { tab: 'unknown' });
+    await wrapper.vm.$nextTick();
+
+    expect(wrapper.find('.home-feed-stub').attributes('data-tab')).toBe('dialect');
+    expect(wrapper.find('.home-top-bar-stub').attributes('data-active')).toBe('dialect');
+  });
+
   it('stage card renders the top nameplate previews', async () => {
     setupUni();
     getNameplatePreview.mockReturnValue({

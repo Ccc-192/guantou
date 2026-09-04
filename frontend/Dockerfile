@@ -3,7 +3,7 @@ RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 COPY package*.json yarn.lock ./
 ENV NODE_ENV=production
-RUN yarn install --frozen-lockfile --production=false
+RUN yarn install --frozen-lockfile --production=false --registry=https://registry.npmmirror.com
 COPY . .
 ENV VITE_BACKEND_URL=VITE_BACKEND_URL_RUNTIME_REPLACEMENT
 RUN yarn build

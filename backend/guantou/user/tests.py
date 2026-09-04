@@ -28,6 +28,7 @@ class EmailVerificationTests(TestCase):
         cache.clear()
         self.client = Client()
 
+    @override_settings(EMAIL_CODE_DEMO_MODE=False)
     @patch("user.verification.generate_email_code", return_value="123456")
     def test_send_and_consume_email_code(self, generate_email_code):
         response = self.client.post(
@@ -61,6 +62,32 @@ class EmailVerificationTests(TestCase):
             content_type="application/json",
         )
         self.assertEqual(response.status_code, 400)
+
+    @patch("user.verification.generate_email_code", return_value="654321")
+    def test_email_code_demo_mode_returns_demo_code(self, generate_email_code):
+        response = self.client.post(
+            "/users/email-code",
+            data='{"email": "demo@example.com"}',
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, 200)
+        payload = response.json()
+        self.assertEqual(payload["demo_code"], "654321")
+        self.assertEqual(payload["delivery"], "demo")
+        self.assertTrue(
+            check_email_code(
+                "demo@example.com",
+                "654321",
+                EmailVerification.Purpose.REGISTER,
+            )
+        )
+        self.assertFalse(
+            check_email_code(
+                "demo@example.com",
+                "654321",
+                EmailVerification.Purpose.REGISTER,
+            )
+        )
 
     def test_rejects_email_already_bound_to_an_account(self):
         User.objects.create_user(username="bound", email="bound@example.com")

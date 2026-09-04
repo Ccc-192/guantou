@@ -4,77 +4,57 @@ import { afterLogin } from '@/services/login';
 
 /**
  * US0101 新建用户（普通）
- * @returns {Promise<unknown>}
+ * 错误不在此处提示，交给调用页按字段映射（见 utils/apiError.js）。
+ * @param {string} username
+ * @param {string} password
+ * @param {string} contact 邮箱或手机号
+ * @param {string} code 验证码
+ * @param {'email'|'phone'} contactType 联系方式类型
  */
-export async function registerUser(username, password, email, code) {
-  return new Promise((resolve, reject) => {
-    rawRequest.post('/users', {
-      username, password, email, code,
-    }, { auth: false }).then((res) => {
-      resolve(res);
-    }).catch((err) => {
-      switch (err.statusCode) {
-        case 401:
-          uni.showToast({
-            title: err.message || '验证码错误',
-            icon: 'error',
-          });
-          break;
-        case 409:
-          uni.showToast({
-            title: err.message || '用户名已存在',
-            icon: 'error',
-          });
-          break;
-        default:
-          uni.showToast({
-            title: err.message || '注册失败',
-            icon: 'error',
-          });
-      }
-      reject(err);
-    });
-  });
+export function registerUser(username, password, contact, code, contactType) {
+  const payload = contactType === 'phone'
+    ? {
+      username, password, phone: contact, code,
+    }
+    : {
+      username, password, email: contact, code,
+    };
+  return rawRequest.post('/users', payload, { auth: false });
 }
 
 /**
  * US0102 新建用户（微信）
+ * Promise 在 uni.login、注册请求与 afterLogin 全部完成后才 settle，
+ * 调用页据此维持 submitting 状态。
  * @param username 用户名
  * @param password 密码
  * @param nickname 昵称
  */
 export function registerWechatUser(username, password, nickname) {
-  uni.login({
-    async success(res) {
-      if (res.code) {
-        await rawRequest.post('/users/wechat/register', {
-          username,
-          password,
-          jscode: res.code,
-          nickname,
-        }, { auth: false }).then(async (response) => {
+  return new Promise((resolve, reject) => {
+    uni.login({
+      async success(res) {
+        if (!res.code) {
+          reject(new Error('当前平台不支持'));
+          return;
+        }
+        try {
+          const response = await rawRequest.post('/users/wechat/register', {
+            username,
+            password,
+            jscode: res.code,
+            nickname,
+          }, { auth: false });
           await afterLogin(response, { isNew: true });
-        }).catch((err) => {
-          switch (err.statusCode) {
-            case 409:
-              uni.showToast({
-                title: err.message || '用户名已存在',
-                icon: 'error',
-              });
-              break;
-            default:
-              uni.showToast({
-                title: err.message || '注册失败',
-                icon: 'error',
-              });
-          }
-        });
-      } else {
-        uni.showToast({
-          title: '当前平台不支持',
-        });
-      }
-    },
+          resolve(response);
+        } catch (error) {
+          reject(error);
+        }
+      },
+      fail() {
+        reject(new Error('获取微信授权失败'));
+      },
+    });
   });
 }
 

@@ -105,7 +105,7 @@ def check_phone_code(phone, code):
     return False
 
 
-def issue_email_code(email, purpose, subject=""):
+def issue_email_code(email, purpose, subject="", demo=False):
     normalized = validate_and_normalize_email(email)
     if purpose not in EmailVerification.Purpose.values:
         raise ValueError("不支持的验证码用途")
@@ -153,6 +153,13 @@ def issue_email_code(email, purpose, subject=""):
                 subject=subject,
                 **values,
             )
+
+    if demo:
+        # Demo 模式不真实发送邮件，标记已送达并直接返回验证码供前端展示。
+        EmailVerification.objects.filter(pk=record.pk, code_digest=digest).update(
+            delivered_at=timezone.now()
+        )
+        return code
 
     try:
         sent = send_mail(
@@ -228,12 +235,24 @@ def email_code(request):
     if User.objects.filter(email__iexact=email_address).exists():
         return JsonResponse({"msg": "该邮箱已被绑定"}, status=409)
     try:
-        issue_email_code(email_address, purpose)
+        code = issue_email_code(
+            email_address, purpose, demo=settings.EMAIL_CODE_DEMO_MODE
+        )
     except EmailCodeThrottled:
         return JsonResponse({"msg": "验证码发送过于频繁"}, status=429)
     except Exception:
         logger.exception("Failed to send email verification code")
         return JsonResponse({"msg": "验证码发送失败，请稍后重试"}, status=502)
+    if settings.EMAIL_CODE_DEMO_MODE:
+        return JsonResponse(
+            {
+                "expires_in": settings.EMAIL_CODE_TTL_SECONDS,
+                "retry_after": settings.EMAIL_CODE_THROTTLE_SECONDS,
+                "delivery": "demo",
+                "demo_code": code,
+            },
+            status=200,
+        )
     return JsonResponse({}, status=200)
 
 

@@ -1,6 +1,7 @@
 import logging
 
 import demjson3
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.db import transaction
@@ -49,10 +50,11 @@ class Forget(View):
             # Do not reveal whether an arbitrary username exists on this write path.
             return JsonResponse({"email_masked": "***"}, status=200)
         try:
-            issue_email_code(
+            code = issue_email_code(
                 user.email,
                 EmailVerification.Purpose.RESET_PASSWORD,
                 subject=user.username,
+                demo=settings.EMAIL_CODE_DEMO_MODE,
             )
         except EmailCodeThrottled:
             return JsonResponse({"msg": "验证码发送过于频繁"}, status=429)
@@ -61,7 +63,10 @@ class Forget(View):
         except Exception:
             logger.exception("Failed to send password reset email")
             return JsonResponse({"msg": "验证码发送失败，请稍后重试"}, status=502)
-        return JsonResponse({"email_masked": mask_email(user.email)}, status=200)
+        payload = {"email_masked": mask_email(user.email)}
+        if settings.EMAIL_CODE_DEMO_MODE:
+            payload["demo_code"] = code
+        return JsonResponse(payload, status=200)
 
     def put(self, request):
         body = demjson3.decode(request.body)

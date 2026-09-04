@@ -43,7 +43,7 @@ describe('httpClient compatibility wrappers', () => {
 
     expect(uni.request).toHaveBeenCalledWith(expect.objectContaining({
       method: 'GET',
-      url: 'http://localhost:8000/cans/',
+      url: 'http://127.0.0.1:8000/cans/',
       data: { page: 1 },
       header: expect.objectContaining({
         'content-type': 'application/json',
@@ -148,7 +148,7 @@ describe('httpClient compatibility wrappers', () => {
 
     expect(uni.request).toHaveBeenCalledWith(expect.objectContaining({
       method: 'POST',
-      url: 'http://localhost:8000/login',
+      url: 'http://127.0.0.1:8000/login',
       header: {
         'content-type': 'application/json',
         'X-Visitor-ID': 'stored-visitor',
@@ -198,7 +198,7 @@ describe('httpClient compatibility wrappers', () => {
     });
 
     expect(uni.uploadFile).toHaveBeenCalledWith(expect.objectContaining({
-      url: 'http://localhost:8000/files',
+      url: 'http://127.0.0.1:8000/files',
       filePath: '/tmp/audio.mp3',
       name: 'file',
       header: {

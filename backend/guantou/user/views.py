@@ -12,6 +12,7 @@ from user.avatar import upload_avatar
 from user.verification import (
     check_email_code,
     check_phone_code,
+    is_valid_phone,
     normalize_email,
     normalize_phone,
 )
@@ -36,43 +37,67 @@ def router_users(request):
                 users.append(user_all(user, private=False))
             return JsonResponse({"users": users}, status=200)
 
-        # US0101 新建用户
+        # US0101 新建用户（邮箱或手机）
         elif request.method == "POST":
             body = demjson3.decode(request.body)
-            user_form = UserForm(body)
-            code = body["code"]
-            if user_form.is_valid():
-                email = normalize_email(user_form.cleaned_data["email"])
+            username = body.get("username", "").strip()
+            password = body.get("password", "")
+            code = body.get("code", "")
+
+            if not username or not password or not code:
+                return JsonResponse({"msg": "用户名、密码或验证码不能为空"}, status=400)
+
+            contact_type = "email" if body.get("email") else "phone"
+
+            if contact_type == "phone":
+                phone = normalize_phone(body["phone"])
+                if not is_valid_phone(phone):
+                    return JsonResponse({"msg": "手机号格式无效"}, status=400)
+                if UserInfo.objects.filter(telephone=phone).exists():
+                    return JsonResponse({"msg": "该手机号已被绑定"}, status=409)
+            else:
+                email = normalize_email(body["email"])
                 if User.objects.filter(email__iexact=email).exists():
                     return JsonResponse({"msg": "该邮箱已被绑定"}, status=409)
-                validate_password_policy(user_form.cleaned_data["password"])
-                with transaction.atomic():
+
+            try:
+                validate_password_policy(password)
+            except Exception as e:
+                return JsonResponse({"msg": str(e)}, status=400)
+
+            with transaction.atomic():
+                if contact_type == "phone":
+                    if not check_phone_code(phone, code):
+                        return JsonResponse({"msg": "验证码错误"}, status=401)
+                    user = User(username=username, email="")
+                    user.set_password(password)
+                    user.save()
+                    user_info = UserInfo.objects.create(
+                        user=user, nickname=username, telephone=phone
+                    )
+                else:
                     if not check_email_code(
                         email,
                         code,
                         EmailVerification.Purpose.REGISTER,
                     ):
-                        return JsonResponse({}, status=401)
-                    user = user_form.save(commit=False)
-                    user.email = email
-                    user.set_password(user_form.cleaned_data["password"])
+                        return JsonResponse({"msg": "验证码错误"}, status=401)
+                    user = User(username=username, email=email)
+                    user.set_password(password)
                     user.save()
                     user_info = UserInfo.objects.create(
                         user=user, nickname=user.username
                     )
-                    if "nickname" in body:
-                        user_info.nickname = body["nickname"]
-                    if "avatar" in body:
-                        user_info.avatar = upload_avatar(
-                            user.id, body["avatar"], suffix="png"
-                        )
-                    user_info.save()
-                return JsonResponse({"id": user.id}, status=200)
-            else:
-                if user_form["username"].errors:
-                    return JsonResponse({}, status=409)
-                else:
-                    return JsonResponse({}, status=400)
+
+                if "nickname" in body:
+                    user_info.nickname = body["nickname"]
+                if "avatar" in body:
+                    user_info.avatar = upload_avatar(
+                        user.id, body["avatar"], suffix="png"
+                    )
+                user_info.save()
+
+            return JsonResponse({"id": user.id}, status=200)
     except IntegrityError:
         return JsonResponse({"msg": "用户名或邮箱已存在"}, status=409)
     except Exception as e:

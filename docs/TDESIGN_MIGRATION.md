@@ -15,57 +15,59 @@
 | `pages/users/settings/nickname` | done | 单字段表单 |
 | `pages/users/settings/telephone` | done | 单字段表单 |
 | `pages/mails/send` | done | [#195](https://github.com/e-dialect/guantou/issues/195) / [PR #216](https://github.com/e-dialect/guantou/pull/216)：标准表单、字段错误与 payload 回归测试 |
-| `pages/login/login` | issue | [#238](https://github.com/e-dialect/guantou/issues/238)：倒计时、双登录模式与登录恢复 |
+| `pages/login/login` | done | [PR #209](https://github.com/e-dialect/guantou/pull/209)：PageShell + BaseField/BaseButton，双登录模式校验作用域、服务端字段错误内联；BaseField 微信端密码掩码修复归 M1 |
 | `pages/nameplates/create` | done | [#237](https://github.com/e-dialect/guantou/issues/237)：BaseForm/BaseField/BaseButton、与装罐页一致的 Cascader/Picker、联合校验、加载重试与防重复提交；H5 浅暗主题已验收，小程序构建通过，真机验收待补 |
 | `pages/users/settings/information` | issue | [#225](https://github.com/e-dialect/guantou/issues/225)：头像开放能力、日期与方言 Picker |
 | `pages/users/settings/password` | issue | [#229](https://github.com/e-dialect/guantou/issues/229)：密码显示与原生 form submit |
 | `pages/users/settings/email` | issue | [#227](https://github.com/e-dialect/guantou/issues/227)：验证码与邮箱绑定流程 |
-| `pages/login/register` | issue | [#228](https://github.com/e-dialect/guantou/issues/228)：验证码、协议与注册校验 |
-| `pages/login/register/wechat` | issue | [#230](https://github.com/e-dialect/guantou/issues/230)：微信昵称/授权能力 |
-| `pages/login/forget` | issue | [#226](https://github.com/e-dialect/guantou/issues/226)：多阶段找回密码流程 |
+| `pages/login/register` | done | [PR #209](https://github.com/e-dialect/guantou/pull/209)：PageShell + 表单原语，注册校验与服务端字段错误内联 |
+| `pages/login/register/wechat` | done | [PR #209](https://github.com/e-dialect/guantou/pull/209)：ConfirmDialog 替换 `uni.showModal`，提交全程 loading，字段错误内联 |
+| `pages/login/forget` | done | [PR #209](https://github.com/e-dialect/guantou/pull/209)：分步校验作用域与服务端字段错误内联 |
 | `pages/cans/create` | partial | [#195](https://github.com/e-dialect/guantou/issues/195) / [PR #216](https://github.com/e-dialect/guantou/pull/216)：录音、草稿、TDesign 级联与枚举 Picker 已迁移；项目表单原语的进一步收敛由 [#232](https://github.com/e-dialect/guantou/issues/232) 跟踪 |
 | `pages/pronunciations/create` | done | [#234](https://github.com/e-dialect/guantou/issues/234)：PageShell + BaseForm/BaseField/BaseButton、统一加载/重试/反馈；保留写法 Picker、方言级联、联合校验、字段错误定位与成功返回 |
 | `pages/shelves/index` | issue | [#231](https://github.com/e-dialect/guantou/issues/231)：创建表单与列表状态 |
 | `pages/shelves/details` | issue | [#235](https://github.com/e-dialect/guantou/issues/235)：编辑、双搜索和成员管理 |
 | `pages/search` / `components/SearchPanel` | issue | [#236](https://github.com/e-dialect/guantou/issues/236)：聚焦、键盘与搜索联想 |
-| `pages/users/onboarding` | issue | [#233](https://github.com/e-dialect/guantou/issues/233)：方言联动选择与登录门禁 |
-| `pages/cans/drafts` | done | [#195](https://github.com/e-dialect/guantou/issues/195) / [PR #216](https://github.com/e-dialect/guantou/pull/216)：加载、空态、错误、继续编辑与删除反馈 |
+| `pages/users/onboarding` | done | [PR #209](https://github.com/e-dialect/guantou/pull/209)：PageShell + 表单原语，方言树加载失败提供重试 |
+| `pages/cans/drafts` | done | [#195](https://github.com/e-dialect/guantou/issues/195) / [PR #216](https://github.com/e-dialect/guantou/pull/216)：加载、空态、错误、继续编辑和删除反馈 |
 | `pages/cans/index` / `library` | queued | 每页独立 PR |
 | `pages/cans/details` / `comments` | done | 普通控件已收敛；分享开放能力及低频 Cell/Textarea 直接使用 TDesign |
-| `pages/nameplates/details` / `comments` | done | 普通按钮与加载已收敛；低频 Cell 直接使用 TDesign |
+| `pages/nameplates/details` / `comments` | done | 普通按钮和加载已收敛；低频 Cell 直接使用 TDesign |
 | `pages/posts/compose` | done | [#195](https://github.com/e-dialect/guantou/issues/195) / [PR #216](https://github.com/e-dialect/guantou/pull/216)：来源锁定、发布状态、字段错误与成功跳转 |
 | `pages/posts/details` | queued | 独立 PR |
-| `pages/flavors/index` / `details` | queued | 搜索、列表与详情操作 |
-| `pages/packages/index` / `details` | queued | 搜索、加载与详情操作 |
-| `pages/circles/index` / `details` | queued | 搜索、Picker 与详情操作 |
-| `pages/discovery/index` | queued | 操作按钮与加载状态 |
-| `pages/users/me` / `details` / `recommend-follow` | queued | 开放能力与关注交互分别迁移 |
+| `pages/flavors/index` / `details` | queued | 搜索、列表和详情操作 |
+| `pages/packages/index` / `details` | queued | 搜索、加载和详情操作 |
+| `pages/circles/index` / `details` | queued | 搜索、Picker 和详情操作 |
+| `pages/discovery/index` | queued | 操作按钮和加载状态 |
+| `pages/users/recommend-follow` | done | [PR #209](https://github.com/e-dialect/guantou/pull/209)：BaseLoading/EmptyState 四状态，空态与失败态带动作 |
+| `pages/users/welcome-tour` | done | 新增页：沉浸式自绘导览（无通用交互控件），链路和 onboarding → recommend-follow 对齐 |
+| `pages/users/me` / `details` | queued | 开放能力和关注交互分别迁移 |
 | `pages/mails/index` / `details` | queued | Cell、加载和通用操作 |
 
 ## 发表立论页（#237）
 
 - 表单使用 BaseForm/BaseField/BaseButton；BaseField 支持插槽承载方言 Cell。方言手动导入 TDesign Cascader，来源类型使用 Picker/PickerItem，与装罐页使用相同的组件、标题和选项布局。PageShell 使用页面滚动，让长表单校验能定位到错误字段。
-- 方言使用与装罐页共享的方言树构建和路径查找逻辑：分级标签、名称/编码/路径搜索、完整路径与选中图标、默认方言点及按账号隔离的最近三项快捷入口（共用装罐页历史）。参考铭牌的方言默认选中但可覆盖，没有匹配时沿用列表首项；空列表仍允许不传 `dialect_id`。
+- 方言使用与装罐页共享的方言树构建和路径查找逻辑：分级标签、名称/编码/路径搜索、完整路径与选中图标、默认方言点和按账号隔离的最近三项快捷入口（共用装罐页历史）。参考铭牌的方言默认选中但可覆盖，没有匹配时沿用列表首项；空列表仍允许不传 `dialect_id`。
 - 资料来源类型与装罐页共用八项选项定义，统一标题、名称和顺序；Cell 以标题展示当前值，Picker 取消不改变原值。
 - 写法和实际读音至少填写一项（纯空白不算），联合错误由 BaseForm 显示在两个字段下方；修改任一字段同时清除两处旧错误。仅在 `validate()` 返回 `true` 时提交。
 - 保留 `nameplate_create` 登录恢复上下文、参考铭牌加载、`createNameplate` 调用及成功后的 replace 跳转。写法、读音和释义清理首尾空白；来源字段只过滤空白项，保留非空值的原文。`creator` 的证据等级继续为 1，其余七种来源为 2。
 - 加载中使用 BaseLoading，加载失败使用 EmptyState 重试；提交失败保留输入和错误提示。通用错误由请求层通过 feedback service 提示，成功使用 `notifySuccess`。异步校验、请求和成功跳转阶段均防止重复提交。
 
-回归入口：`frontend/tests/unit/NameplateCreate.test.js`（24 项）与 `frontend/tests/e2e/nameplate-create.spec.js`（7 项）。浏览器测试使用隔离接口响应，覆盖 390×844 浅暗主题、联合错误与定位、方言层级浏览/关闭/搜索/默认及最近快捷选择、来源 Picker 的取消/重新打开/确认、来源过滤与 payload、登录拦截、加载失败重试、提交失败重试和重复点击，不写入真实业务数据。
+回归入口：`frontend/tests/unit/NameplateCreate.test.js`（24 项）和 `frontend/tests/e2e/nameplate-create.spec.js`（7 项）。浏览器测试使用隔离接口响应，覆盖 390×844 浅暗主题、联合错误与定位、方言层级浏览/关闭/搜索/默认及最近快捷选择、来源 Picker 的取消/重新打开/确认、来源过滤与 payload、登录拦截、加载失败重试、提交失败重试和重复点击，不写入真实业务数据。
 
 390×844 H5 截图：首屏 [浅色](assets/tdesign-migration/nameplate-create-light-390x844.png) / [暗色](assets/tdesign-migration/nameplate-create-dark-390x844.png)，方言 Cascader [浅色](assets/tdesign-migration/nameplate-create-picker-light-390x844.png) / [暗色](assets/tdesign-migration/nameplate-create-picker-dark-390x844.png)，来源 Picker [浅色](assets/tdesign-migration/nameplate-create-source-light-390x844.png) / [暗色](assets/tdesign-migration/nameplate-create-source-dark-390x844.png)，长表单底部 [浅色](assets/tdesign-migration/nameplate-create-footer-light-390x844.png) / [暗色](assets/tdesign-migration/nameplate-create-footer-dark-390x844.png)。
 
-在已启动的 H5 服务上运行 `npm run test:e2e:h5 -- tests/e2e/nameplate-create.spec.js`，非默认端口通过 `E2E_BASE_URL` 指定；设置 `UPDATE_MIGRATION_SCREENSHOTS=1` 可刷新文档截图。已通过 lint、全量单元测试、H5 与微信小程序构建，并检查小程序产物显式注册 Cascader、Picker/PickerItem 组件且页面没有原生 Picker。当前环境未进行微信开发者工具/真机浅暗主题交互验收，构建结果不替代这一步。
+在已启动的 H5 服务上运行 `npm run test:e2e:h5 -- tests/e2e/nameplate-create.spec.js`，非默认端口通过 `E2E_BASE_URL` 指定；设置 `UPDATE_MIGRATION_SCREENSHOTS=1` 可刷新文档截图。已通过 lint、全量单元测试、H5 和微信小程序构建，并检查小程序产物显式注册 Cascader、Picker/PickerItem 组件且页面没有原生 Picker。当前环境未进行微信开发者工具/真机浅暗主题交互验收，构建结果不替代这一步。
 
 ## 添加读音页（#234）
 
 - 义项继续由路由锁定；唯一关联写法自动选中，多个写法不自动选首项。重新加载时保留仍有效的选择，清除不再关联的写法。
-- 方言保留可检索的层级级联、默认方言与最近使用入口。读音类型与更多语言学信息的显隐方式不变。
+- 方言保留可检索的层级级联、默认方言和最近使用入口。读音类型和更多语言学信息的显隐方式不变。
 - `validatePronunciationDraft` 仍是联合校验的来源：IPA、写法、方言必填；变调前后形式成对填写；填写变调环境时必须同时具备两种形式。`sandhi_info` 错误映射到 `sandhi_environment` 表单项。
 - 客户端和服务端字段错误均交给 BaseForm 展示；先展开相关折叠区，再校验并滚动定位。PageShell 使用页面滚动，让 TDesign 的错误定位在长表单中生效。
 - 提交继续清理首尾空白、转换数字 ID，保留 API 与 payload；成功时返回上一页，无历史栈则返回锁定义项详情。请求失败保留输入，不重复弹出字段错误提示。
 
-回归入口：`frontend/tests/unit/PronunciationCreate.test.js` 与 `frontend/tests/e2e/pronunciation-create.spec.js`。浏览器用例使用隔离的接口响应，不写入真实业务数据，覆盖浅暗主题、写法/方言选择、变调联合校验、服务端错误、选项加载失败/重试与成功返回。
+回归入口：`frontend/tests/unit/PronunciationCreate.test.js` 和 `frontend/tests/e2e/pronunciation-create.spec.js`。浏览器用例使用隔离的接口响应，不写入真实业务数据，覆盖浅暗主题、写法/方言选择、变调联合校验、服务端错误、选项加载失败/重试和成功返回。
 
 390×844 H5 截图：[浅色](assets/tdesign-migration/pronunciation-create-light-390x844.png)、[暗色](assets/tdesign-migration/pronunciation-create-dark-390x844.png)、[变调校验](assets/tdesign-migration/pronunciation-create-sandhi-error-390x844.png)。
 
@@ -73,4 +75,4 @@
 
 ## Completion
 
-所有 `issue` 和 `queued` 页面完成后：确认仓库不再使用原生交互控件、`uni-ui` 表单或 `cu-*`，再删除 `legacy-form-compat.scss`、ColorUI 全局引入、无用 easycom 映射与 `@dcloudio/uni-ui` 依赖。
+所有 `issue` 和 `queued` 页面完成后：确认仓库不再使用原生交互控件、`uni-ui` 表单或 `cu-*`，再删除 `legacy-form-compat.scss`、ColorUI 全局引入、无用 easycom 映射和 `@dcloudio/uni-ui` 依赖。
