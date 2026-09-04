@@ -26,6 +26,7 @@ export const ROUTES = Object.freeze({
   userDetail: '/pages/users/details',
   onboarding: '/pages/users/onboarding',
   recommendFollow: '/pages/users/recommend-follow',
+  welcomeTour: '/pages/users/welcome-tour',
   loginRegister: '/pages/login/register',
   loginWechatRegister: '/pages/login/register/wechat',
   loginForget: '/pages/login/forget',
@@ -145,6 +146,7 @@ export const goRecommendFollow = (reset = false) => openPage(
   {},
   { reset },
 );
+export const goWelcomeTour = (reset = false) => openPage(ROUTES.welcomeTour, {}, { reset });
 export const goLoginRegister = () => openPage(ROUTES.loginRegister);
 export const goLoginWechatRegister = () => openPage(ROUTES.loginWechatRegister);
 export const goLoginForget = () => openPage(ROUTES.loginForget);
@@ -214,6 +216,7 @@ export default {
   goUserPassword,
   goUserPhone,
   goUserUsername,
+  goWelcomeTour,
   openPage,
   pageUrl,
   routeDestination,
