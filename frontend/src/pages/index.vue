@@ -78,7 +78,7 @@ import {
   closeCommentSheet,
   isCommentSheetActive,
 } from '@/services/commentSheet';
-import { resolveDefaultTab } from '@/services/homeFeed';
+import { HOME_FEED_TABS, resolveDefaultTab } from '@/services/homeFeed';
 import { ROUTES } from '@/services/navigation';
 import { SHARE_TITLE } from '@/const/branding';
 import { canSharePayload } from '@/utils/shareCan';
@@ -111,6 +111,9 @@ export default {
     this.ensureTabVisited(this.activeTab);
     /* 记录首次可见时的登录态指纹（非响应式），供 onShow 比对 */
     this.lastFeedFingerprint = this.feedFingerprint();
+  },
+  onLoad(options = {}) {
+    this.resolveActiveTab(options?.tab);
   },
   onShareAppMessage() {
     if (this.pendingShareCan) return canSharePayload(this.pendingShareCan);
@@ -155,6 +158,13 @@ export default {
     stopAudio();
   },
   methods: {
+    resolveActiveTab(tab) {
+      const validKeys = HOME_FEED_TABS.map((item) => item.key);
+      const selectedTab = validKeys.includes(tab) ? tab : resolveDefaultTab();
+      this.activeTab = selectedTab;
+      this.userSelectedTab = true;
+      this.ensureTabVisited(selectedTab);
+    },
     /*
      * feed 重建指纹：登录态（token 有无）+ 主方言。
      * 依赖的 storage / globalData 均非响应式，故用方法而非 computed，
