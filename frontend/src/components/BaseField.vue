@@ -28,6 +28,7 @@
           v-else
           :value="modelValue"
           :type="inputType"
+          :password="passwordProp"
           :placeholder="placeholder"
           :maxlength="maxlength"
           :disabled="disabled"
@@ -82,8 +83,12 @@ export default {
   emits: ['update:modelValue', 'change', 'input', 'blur', 'focus'],
   computed: {
     inputType() {
+      if (this.type === 'password') return 'text';
       if (this.type === 'tel') return 'number';
       return this.type;
+    },
+    passwordProp() {
+      return this.type === 'password' ? true : undefined;
     },
     resolvedAutosize() {
       if (this.autosize) return this.autosize;
