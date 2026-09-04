@@ -13,7 +13,7 @@ test('H5 app renders home page', async ({ page }) => {
   expect(consoleErrors).toEqual([]);
 });
 
-const backendURL = process.env.E2E_BACKEND_URL || 'http://localhost:8000';
+const backendURL = process.env.E2E_BACKEND_URL || 'http://127.0.0.1:8000';
 
 test('backend site settings API is reachable', async ({ request }) => {
   const response = await request.get(`${backendURL}/site-settings/carousel`);

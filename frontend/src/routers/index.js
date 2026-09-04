@@ -3,8 +3,8 @@ import { goHome, goSearch } from '@/services/navigation';
 /**
  * 跳转至首页
  */
-export function toIndexPage(closeAll = false) {
-  return goHome(closeAll);
+export function toIndexPage(closeAll = false, params = {}) {
+  return goHome(closeAll, params);
 }
 
 /**

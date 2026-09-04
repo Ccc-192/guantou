@@ -8,6 +8,7 @@ import {
   goUserPassword,
   goUserPhone,
   goUserUsername,
+  goWelcomeTour,
 } from '@/services/navigation';
 
 export const toUserPage = (id) => goUserDetail(id);
@@ -20,6 +21,10 @@ export const toChangePasswordPage = () => goUserPassword();
 
 export function toFollowRecommendations(closeAll = false) {
   return goRecommendFollow(closeAll);
+}
+
+export function toWelcomeTour(closeAll = false) {
+  return goWelcomeTour(closeAll);
 }
 
 export function toMePage(closeAll = false) {
