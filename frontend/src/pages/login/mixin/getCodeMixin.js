@@ -4,6 +4,7 @@ export default {
   data() {
     return {
       email: '',
+      demoCode: '',
       isSending: false,
       count: 30,
       emailPattern: /^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$/,
@@ -30,12 +31,15 @@ export default {
   },
   methods: {
     sendEmCode(email, purpose = 'register') {
-      sendEmailCode(email, purpose).then(() => {
+      sendEmailCode(email, purpose).then((response) => {
+        this.demoCode = (response && response.demo_code) || '';
         // 防止还在发送但未完成状态就已经开始计时
         uni.showToast({
           title: '验证码已发送',
         });
         this.isSending = true;
+      }).catch(() => {
+        // sendEmailCode 走非 silent 的 request，失败提示由 httpClient 全局 toast 负责
       });
     },
   },

@@ -28,13 +28,13 @@
           v-else
           :value="modelValue"
           :type="inputType"
+          :password="passwordProp"
           :placeholder="placeholder"
           :maxlength="maxlength"
           :disabled="disabled"
           :readonly="readonly"
           :clearable="clearable"
-          :status="error ? 'error' : status"
-          :suffix-icon="suffixIcon"
+          :status="error ? 'error' : 'default'"
           borderless
           @change="handleChange"
           @blur="$emit('blur', $event)"
@@ -63,12 +63,6 @@ export default {
     modelValue: { type: [String, Number], default: '' },
     name: { type: String, required: true },
     label: { type: String, default: '' },
-    status: {
-      type: String,
-      default: 'default',
-      validator: (value) => ['default', 'success', 'warning', 'error'].includes(value),
-    },
-    suffixIcon: { type: [String, Object], default: undefined },
     type: {
       type: String,
       default: 'text',
@@ -89,8 +83,12 @@ export default {
   emits: ['update:modelValue', 'change', 'input', 'blur', 'focus'],
   computed: {
     inputType() {
+      if (this.type === 'password') return 'text';
       if (this.type === 'tel') return 'number';
       return this.type;
+    },
+    passwordProp() {
+      return this.type === 'password' ? true : undefined;
     },
     resolvedAutosize() {
       if (this.autosize) return this.autosize;
