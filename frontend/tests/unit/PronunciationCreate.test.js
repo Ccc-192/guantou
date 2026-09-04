@@ -49,6 +49,7 @@ function createPage(overrides = {}) {
     ...PronunciationCreate.methods,
     flavorId: 1,
     flavor: { id: 1, name: '行走' },
+    rules: {},
     $nextTick: vi.fn(() => Promise.resolve()),
     ...overrides,
   };
