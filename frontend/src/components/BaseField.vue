@@ -1,130 +1,138 @@
-<template>
-  <t-form-item
-    class="base-field"
-    :name="name"
-    :label="label"
-    :help="help"
-    :required-mark="required"
-    :rules="rules"
-    label-align="top"
-  >
-    <view class="base-field-control">
-      <slot>
-        <t-textarea
-          v-if="type === 'textarea'"
-          :value="modelValue"
-          :placeholder="placeholder"
-          :maxlength="maxlength"
-          :disabled="disabled"
-          :readonly="readonly"
-          :autosize="resolvedAutosize"
-          :indicator="indicator"
-          bordered
-          @change="handleChange"
-          @blur="$emit('blur', $event)"
-          @focus="$emit('focus', $event)"
-        />
-        <t-input
-          v-else
-          :value="modelValue"
-          :type="inputType"
-          :password="passwordProp"
-          :placeholder="placeholder"
-          :maxlength="maxlength"
-          :disabled="disabled"
-          :readonly="readonly"
-          :clearable="clearable"
-          :status="error ? 'error' : 'default'"
-          borderless
-          @change="handleChange"
-          @blur="$emit('blur', $event)"
-          @focus="$emit('focus', $event)"
-        />
-      </slot>
-    </view>
-    <view
-      v-if="error"
-      class="base-field-error"
-    >
-      {{ error }}
-    </view>
-  </t-form-item>
-</template>
+<path>C:\Users\15265\Desktop\guantou\frontend\src\components\BaseField.vue</path>
+<type>file</type>
+<content>
+1: <template>
+2:   <t-form-item
+3:     class="base-field"
+4:     :name="name"
+5:     :label="label"
+6:     :help="help"
+7:     :required-mark="required"
+8:     :rules="rules"
+9:     label-align="top"
+10:   >
+11:     <view class="base-field-control">
+12:       <slot>
+13:         <t-textarea
+14:           v-if="type === 'textarea'"
+15:           :value="modelValue"
+16:           :placeholder="placeholder"
+17:           :maxlength="maxlength"
+18:           :disabled="disabled"
+19:           :readonly="readonly"
+20:           :autosize="resolvedAutosize"
+21:           :indicator="indicator"
+22:           bordered
+23:           @change="handleChange"
+24:           @blur="$emit('blur', $event)"
+25:           @focus="$emit('focus', $event)"
+26:         />
+27:         <t-input
+28:           v-else
+29:           :value="modelValue"
+30:           :type="inputType"
+31:           :password="passwordProp"
+32:           :placeholder="placeholder"
+33:           :maxlength="maxlength"
+34:           :disabled="disabled"
+35:           :readonly="readonly"
+36:           :clearable="clearable"
+37:           :status="error ? 'error' : 'default'"
+38:           borderless
+39:           @change="handleChange"
+40:           @blur="$emit('blur', $event)"
+41:           @focus="$emit('focus', $event)"
+42:         />
+43:       </slot>
+44:     </view>
+45:     <view
+46:       v-if="error"
+47:       class="base-field-error"
+48:     >
+49:       {{ error }}
+50:     </view>
+51:   </t-form-item>
+52: </template>
+53:
+54: <script>
+55: import TFormItem from '@tdesign/uniapp/form-item/form-item.vue';
+56: import TInput from '@tdesign/uniapp/input/input.vue';
+57: import TTextarea from '@tdesign/uniapp/textarea/textarea.vue';
+58:
+59: export default {
+60:   name: 'BaseField',
+61:   components: { TFormItem, TInput, TTextarea },
+62:   props: {
+63:     modelValue: { type: [String, Number], default: '' },
+64:     name: { type: String, required: true },
+65:     label: { type: String, default: '' },
+66:     type: {
+67:       type: String,
+68:       default: 'text',
+69:       validator: (value) =>
+        ['text', 'textarea', 'number', 'digit', 'password', 'tel'].includes(value),
+70:     },
+71:     placeholder: { type: String, default: '' },
+72:     maxlength: { type: Number, default: -1 },
+73:     disabled: { type: Boolean, default: false },
+74:     readonly: { type: Boolean, default: false },
+75:     required: { type: Boolean, default: false },
+76:     rules: { type: Array, default: () => [] },
+77:     help: { type: String, default: '' },
+78:     error: { type: String, default: '' },
+79:     autosize: { type: [Boolean, Object], default: false },
+80:     indicator: { type: Boolean, default: false },
+81:     clearable: { type: Boolean, default: false },
+82:   },
+83:   emits: ['update:modelValue', 'change', 'input', 'blur', 'focus'],
+84:   computed: {
+85:     inputType() {
+86:       if (this.type === 'password') return 'text';
+87:       if (this.type === 'tel') return 'number';
+88:       return this.type;
+89:     },
+90:     passwordProp() {
+91:       return this.type === 'password' ? true : undefined;
+92:     },
+93:     resolvedAutosize() {
+94:       if (this.autosize) return this.autosize;
+95:       return { minHeight: 80 };
+96:     },
+97:   },
+98:   methods: {
+99:     handleChange(event) {
+100:       const value = event?.detail?.value ?? event?.value ?? event ?? '';
+101:       this.$emit('update:modelValue', value);
+102:       this.$emit('change', value);
+103:       this.$emit('input', value);
+104:     },
+105:   },
+106: };
+107: </script>
+108:
+109: <style scoped>
+110: .base-field {
+111:   --td-form-item-border-color: transparent;
+112:   --td-form-item-horizontal-padding: 0;
+113:   --td-form-item-vertical-padding: var(--space-2);
+114:   --td-input-bg-color: var(--surface-color);
+115:   --td-input-vertical-padding: var(--space-2) var(--space-3);
+116:   --td-textarea-background-color: var(--surface-color);
+117:   --td-textarea-padding: var(--space-2) var(--space-3);
+118: }
+119:
+120: .base-field-error {
+121:   margin-top: var(--space-1);
+122:   color: var(--danger-color);
+123:   font-size: var(--font-size-xs);
+124: }
+125:
+126: .base-field-control {
+127:   width: 100%;
+128:   min-width: 0;
+129: }
+130: </style>
+131:
 
-<script>
-import TFormItem from '@tdesign/uniapp/form-item/form-item.vue';
-import TInput from '@tdesign/uniapp/input/input.vue';
-import TTextarea from '@tdesign/uniapp/textarea/textarea.vue';
-
-export default {
-  name: 'BaseField',
-  components: { TFormItem, TInput, TTextarea },
-  props: {
-    modelValue: { type: [String, Number], default: '' },
-    name: { type: String, required: true },
-    label: { type: String, default: '' },
-    type: {
-      type: String,
-      default: 'text',
-      validator: (value) => ['text', 'textarea', 'number', 'digit', 'password', 'tel'].includes(value),
-    },
-    placeholder: { type: String, default: '' },
-    maxlength: { type: Number, default: -1 },
-    disabled: { type: Boolean, default: false },
-    readonly: { type: Boolean, default: false },
-    required: { type: Boolean, default: false },
-    rules: { type: Array, default: () => [] },
-    help: { type: String, default: '' },
-    error: { type: String, default: '' },
-    autosize: { type: [Boolean, Object], default: false },
-    indicator: { type: Boolean, default: false },
-    clearable: { type: Boolean, default: false },
-  },
-  emits: ['update:modelValue', 'change', 'input', 'blur', 'focus'],
-  computed: {
-    inputType() {
-      if (this.type === 'password') return 'text';
-      if (this.type === 'tel') return 'number';
-      return this.type;
-    },
-    passwordProp() {
-      return this.type === 'password' ? true : undefined;
-    },
-    resolvedAutosize() {
-      if (this.autosize) return this.autosize;
-      return { minHeight: 80 };
-    },
-  },
-  methods: {
-    handleChange(event) {
-      const value = event?.detail?.value ?? event?.value ?? event ?? '';
-      this.$emit('update:modelValue', value);
-      this.$emit('change', value);
-      this.$emit('input', value);
-    },
-  },
-};
-</script>
-
-<style scoped>
-.base-field {
-  --td-form-item-border-color: transparent;
-  --td-form-item-horizontal-padding: 0;
-  --td-form-item-vertical-padding: var(--space-2);
-  --td-input-bg-color: var(--surface-color);
-  --td-input-vertical-padding: var(--space-2) var(--space-3);
-  --td-textarea-background-color: var(--surface-color);
-  --td-textarea-padding: var(--space-2) var(--space-3);
-}
-
-.base-field-error {
-  margin-top: var(--space-1);
-  color: var(--danger-color);
-  font-size: var(--font-size-xs);
-}
-
-.base-field-control {
-  width: 100%;
-  min-width: 0;
-}
-</style>
+(End of file - total 131 lines)
+</content>
